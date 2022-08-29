@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -7,12 +9,18 @@ public class Client {
     public static void main(String args[]) throws Exception {
         ArrayList<Exam> exams = new ArrayList<Exam>();
         exams.add(new Exam("SDP", 21, "2022/01/31"));
+        exams.add(new Exam("MOBILE COMPUTING", 21, "2022/01/27"));
         Student student = new Student("Mattia", "Fasoli", 1998, new Residence("Milano", "Via Solferino, 44", 20121), exams);
 
         DataOutputStream outToServer;
 
         Socket clientSocket = new Socket("localhost", 6789);
         outToServer = new DataOutputStream(clientSocket.getOutputStream());
+
+        Gson gson = new Gson();
+        String studentString = gson.toJson(student);
+
+        outToServer.writeBytes(studentString + "\n");
     }
 }
 
@@ -33,7 +41,15 @@ class Student {
 
     public String print() {
         String student = "";
-        student += "Name: " + name + ";\n" + "Surname: " + surname + ";\n" + "Year Of Birth: " + yearOfBirth + ";\n" + "Residence: " + residence.print() + ";\n";
+        student += "Name: " + name + ";\n";
+        student += "Surname: " + surname + ";\n";
+        student += "Year Of Birth: " + yearOfBirth + ";\n";
+        student += "Residence: " + residence.print();
+        student += "Exams: " + "\n";
+        for (Exam exam: exams) {
+            student += exam.print();
+        };
+
         return student;
     }
 }

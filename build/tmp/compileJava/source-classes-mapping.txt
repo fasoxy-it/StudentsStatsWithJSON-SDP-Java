@@ -1,4 +1,7 @@
-TCPServer.java
- TCPServer
-TCPClient.java
- TCPClient
+Server.java
+ Server
+Client.java
+ Client
+ Exam
+ Residence
+ Student
